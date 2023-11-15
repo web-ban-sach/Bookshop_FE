@@ -29,8 +29,8 @@ export const SideBar = () => {
     }, []);
 
     return <>
-        <article className=" w-[25%] p-2">
-            <div className="font-bold text-2xl mb-1">Danh mục</div>
+        <article className=" bg-white w-[20%] p-3 border-r border-gray-100 shadow-lg rounded-l-lg">
+            <div className="font-bold text-xl mb-1">Danh mục</div>
             {
                 categories?.data?.data.map((category) => (
                     <Link to={`/list-book/${category._id}`} key={category._id} >
@@ -38,7 +38,7 @@ export const SideBar = () => {
                     </Link>
                 ))
             }
-            <div className="font-bold text-2xl mb-1">Tác giả nổi bật</div>
+            <div className="font-bold text-xl mt-5 mb-1">Tác giả tiêu biểu</div>
             {
                 authors?.data?.data.map((author) => (
                     <Link to={`/list-book/${author._id}`} key={author._id} >

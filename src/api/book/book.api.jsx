@@ -1,41 +1,22 @@
 import instance from "../instance"
 
 export const getBooks = () => {
-    return instance.get('/book')
+    return instance.get('/book/read')
 }
 
 export const getBookById = (id) => {
-    return instance.get('/book' + id)
+    return instance.get('/book/read/' + id)
 }
 
 export const addBook = (data) => {
-    return instance.post('/book', data)
+    return instance.post('/book/add', data)
 }
 
 export const updateBook = (id, data) => {
-    return instance.put('/book' + id, data)
+    return instance.put('/book/update/' + id, data)
 }
 
 export const removeBook = (id) => {
-    return instance.delete('/book' + id)
+    return instance.delete('/book/remove' + id)
 }
 
-export const getBooksDetail = () => {
-    return instance.get('/book')
-}
-
-export const getBookDetailById = (id) => {
-    return instance.get('/book' + id)
-}
-
-export const addBookDetail = (data) => {
-    return instance.post('/book', data)
-}
-
-export const updateBookDetail = (id, data) => {
-    return instance.put('/book' + id, data)
-}
-
-export const removeBookDetail = (id) => {
-    return instance.delete('/book' + id)
-}

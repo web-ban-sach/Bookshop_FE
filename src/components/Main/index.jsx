@@ -3,9 +3,9 @@ import { SideBar } from "../SideBar"
 
 export const Main = () => {
     return <>
-        <main className=" flex px-[150px]">
+        <main className=" flex px-[150px] border border-gray-200">
             <SideBar />
-            <section className=" w-[75%] p-2">
+            <section className=" bg-white w-[80%] p-3 shadow-lg rounded-r-lg">
                 <Outlet />
             </section>
         </main>
