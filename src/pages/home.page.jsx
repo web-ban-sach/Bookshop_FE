@@ -17,20 +17,18 @@ const HomePage = () => {
 
     return <>
         {books?.data?.data.map((book) => {
-            const discounted = book.price - (book.price * book.sale) / 100;
-            const newPriceRoundedDown = Math.floor(discounted);
             const formattedPrice = new Intl.NumberFormat('vi-VN', {
                 style: 'currency',
                 currency: 'VND',
-            }).format(book.price);
+            }).format(book.old_price);
             const formattedNewPrice = new Intl.NumberFormat('vi-VN', {
                 style: 'currency',
                 currency: 'VND',
-            }).format(newPriceRoundedDown);
+            }).format(book.new_price);
 
             return <div key={book._id} className=" w-48 p-4 rounded-lg hover:shadow-lg">
                 <title>Trang chủ</title>
-                <img className=" px-8 mb-2" src="https://res.cloudinary.com/dyewrrq39/image/upload/v1699959492/bookshop/qlx6ruad1pjs5a1k6rdx.jpg" alt="" />
+                <img className=" px-8 mb-2" src={book.thumbnail} alt="" />
                 <Link to={'/'}><p className=" text-sm leading-4 h-8 overflow-hidden overflow-ellipsis line-clamp-2 hover:text-blue-800 hover:underline">{book.book_title}</p></Link>
                 {book.author_id.length === 1 && book.author_id.map((author) => {
                     return <Link to={'/'} key={author._id}><p className=" text-xs mt-1 text-green-500 font-bold hover:underline overflow-hidden overflow-ellipsis whitespace-nowrap">{author.author_name}</p></Link>

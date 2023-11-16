@@ -2,6 +2,7 @@ import { useForm, Controller } from "react-hook-form";
 import { registerSchema } from "../../helper/auth.schema";
 import { register } from "../../api/user/auth.api";
 import { Link } from "react-router-dom";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 
 export const RegisterPage = () => {
     const { handleSubmit, control, formState: { errors } } = useForm({
@@ -36,7 +37,7 @@ export const RegisterPage = () => {
 
     return (
         <main className="w-full flex">
-        <title>Sign up</title>
+            <title>Sign up</title>
             <div className="relative flex-1 hidden items-center justify-center h-screen bg-indigo-500 lg:flex">
                 <div className="relative z-10 w-full max-w-md">
                     <img src="https://res.cloudinary.com/dyewrrq39/image/upload/v1699954671/bookshop/gxwg1z51r02g4fiybngr.png" width={150} />
@@ -63,8 +64,9 @@ export const RegisterPage = () => {
                     <div className="">
                         <img src="https://floatui.com/logo.svg" width={150} className="lg:hidden" />
                         <div className="mt-5 space-y-2">
+                            <Link to={'/'} className=" flex items-center text-sm text-indigo-600 hover:text-indigo-500 hover:underline" ><ArrowLeftOutlined className="mr-2" /> Back to home</Link>
                             <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl">Sign up</h3>
-                            <p className="">Already have an account? <Link to={'/user/login'} className="font-medium text-indigo-600 hover:text-indigo-500">Login</Link></p>
+                            <p className="">Already have an account? <Link to={'/auth/login'} className="font-medium text-indigo-600 hover:text-indigo-500">Login</Link></p>
                         </div>
                     </div>
                     <form

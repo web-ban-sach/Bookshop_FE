@@ -8,7 +8,45 @@ import {
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
 import { Loaders } from '../Loaders';
+import { decodeToken } from '../../api/user/auth.api';
+import { Link, Outlet } from 'react-router-dom';
 const { Header, Sider, Content } = Layout;
+
+const CustomMenu = () => {
+    const menuItems = [
+        {
+            key: '1',
+            icon: <UserOutlined />,
+            label: 'nav 1',
+            href: '/admin/book/list'
+        },
+        {
+            key: '2',
+            icon: <VideoCameraOutlined />,
+            label: 'nav 2',
+            href: '/book'
+
+        },
+        {
+            key: '3',
+            icon: <UploadOutlined />,
+            label: 'nav 3',
+            href: '/book'
+
+        },
+    ]
+
+    return <>
+        <Menu theme='dark' mode="inline" defaultSelectedKeys={['1']}>
+            {menuItems.map(item => (
+                <Menu.Item key={item.key} icon={item.icon}>
+                    <Link to={item.href}>{item.label}</Link>
+                </Menu.Item>
+            ))}
+        </Menu>
+    </>
+}
+
 const AdminLayout = () => {
     const [loading, setLoading] = useState(true);
 
@@ -23,36 +61,26 @@ const AdminLayout = () => {
     }, [loading]);
 
     const [collapsed, setCollapsed] = useState(false);
+    const [user, setUser] = useState('')
     const {
         token: { colorBgContainer },
     } = theme.useToken();
+
+    useEffect(() => {
+        const token = localStorage.getItem('token')
+        const fetchUser = async () => {
+            const response = await decodeToken(token)
+            setUser(response.data.data);
+        }
+        fetchUser()
+    }, [])
+
     return <>
         {loading ? <Loaders /> :
             <Layout>
                 <Sider trigger={null} collapsible collapsed={collapsed}>
                     <div className="demo-logo-vertical" />
-                    <Menu
-                        theme="dark"
-                        mode="inline"
-                        defaultSelectedKeys={['1']}
-                        items={[
-                            {
-                                key: '1',
-                                icon: <UserOutlined />,
-                                label: 'nav 1',
-                            },
-                            {
-                                key: '2',
-                                icon: <VideoCameraOutlined />,
-                                label: 'nav 2',
-                            },
-                            {
-                                key: '3',
-                                icon: <UploadOutlined />,
-                                label: 'nav 3',
-                            },
-                        ]}
-                    />
+                    <CustomMenu />
                 </Sider>
                 <Layout>
                     <Header
@@ -73,8 +101,10 @@ const AdminLayout = () => {
                             }}
                         />
                         <div className=' flex items-center justify-between px-4'>
-                            <p className=' px-4'>Xin chào Admin</p>
-                            <img className=' rounded-full w-10 h-10' src="https://res.cloudinary.com/dyewrrq39/image/upload/v1677981372/sxckpgyae4p69qvpdjrc.jpg" alt="" />
+                            {user && user.fullname ? <p className=' px-4'>Xin chào {user.fullname}</p> : <p>Xin chào admin</p>}
+                            {user && user.avatar
+                                ? <img className=' rounded-full w-10 h-10' src={user.avatar} alt="" />
+                                : <img className=' rounded-full w-10 h-10' src="https://res.cloudinary.com/dyewrrq39/image/upload/v1700105007/bookshop/zsvvhe07vdiolrwrwpd5.png" alt="" />}
                         </div>
                     </Header>
                     <Content
@@ -85,7 +115,7 @@ const AdminLayout = () => {
                             background: colorBgContainer,
                         }}
                     >
-                        Content
+                        <Outlet />
                     </Content>
                 </Layout>
             </Layout>}

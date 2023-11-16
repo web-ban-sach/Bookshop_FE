@@ -17,6 +17,6 @@ export const updateBook = (id, data) => {
 }
 
 export const removeBook = (id) => {
-    return instance.delete('/book/remove' + id)
+    return instance.delete('/book/remove/' + id)
 }
 

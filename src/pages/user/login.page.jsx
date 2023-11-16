@@ -2,6 +2,7 @@ import { useForm, Controller } from "react-hook-form";
 import { login } from "../../api/user/auth.api";
 import { loginSchema } from "../../helper/auth.schema";
 import { Link, useNavigate } from "react-router-dom";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 
 export const LoginPage = () => {
     const navigate = useNavigate()
@@ -22,14 +23,13 @@ export const LoginPage = () => {
         }
     })
 
-    // Hàm xử lý khi submit form
+    
     const onSubmit = async (data) => {
         try {
             const response = await login(data)
             if (response) {
                 // Lưu token vào localStorage
                 localStorage.setItem('token', response.data.token)
-                window.alert('Đăng nhập thành công!')
                 navigate('/')
             }
         } catch (error) {
@@ -43,14 +43,15 @@ export const LoginPage = () => {
 
     return (
         <main className="w-full flex">
-        <title>Login</title>
+            <title>Login</title>
             <div className="flex-1 flex items-center justify-center h-screen">
                 <div className="w-full max-w-md space-y-8 px-4 bg-white text-gray-600 sm:px-0">
                     <div className="">
                         <img src="https://floatui.com/logo.svg" width={150} className="lg:hidden" />
                         <div className="mt-5 space-y-2">
+                            <Link to={'/'} className=" flex items-center text-sm text-indigo-600 hover:text-indigo-500 hover:underline" ><ArrowLeftOutlined className="mr-2"/> Back to home</Link>
                             <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl">Login</h3>
-                            <p className="">Do not have an account? <Link to={'/user/register'} className="font-medium text-indigo-600 hover:text-indigo-500">Sign up</Link></p>
+                            <p className="">Do not have an account? <Link to={'/auth/register'} className="font-medium text-indigo-600 hover:text-indigo-500">Sign up</Link></p>
                         </div>
                     </div>
                     <form
