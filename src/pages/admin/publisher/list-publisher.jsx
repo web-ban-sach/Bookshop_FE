@@ -1,23 +1,22 @@
 import { useEffect, useState } from 'react';
 import { Button, List, Skeleton } from 'antd';
-import { getBooks } from '../../../api/book/book.api';
 import { Link } from 'react-router-dom';
 import { ArrowRightOutlined } from '@ant-design/icons';
+import { getPublishers } from '../../../api/book/publisher.api';
 
-const count = 6;
-const ListBook = () => {
+const count = 4;
+const ListPublisher = () => {
     const [initLoading, setInitLoading] = useState(true);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
     const [list, setList] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
-            await getBooks().then((res) => {
+            await getPublishers().then((res) => {
                 setInitLoading(false);
                 setData(res.data.data);
                 setList(res.data.data.slice(0, count));
             });
-
         }
         fetchData()
     }, []);
@@ -28,14 +27,13 @@ const ListBook = () => {
                 data.concat(
                     [...new Array(count)].map(() => ({
                         loading: true,
-                        book_title: {},
-                        thumbnail: {},
+                        publisher_name: {},
                         description: {},
                     })),
                 ),
             );
         }
-        getBooks()
+        getPublishers()
             .then((res) => {
                 const newData = data.concat(res.data.data.filter(newItem => !data.some(item => item._id === newItem._id)))
                 setData(newData);
@@ -61,10 +59,11 @@ const ListBook = () => {
     return (
         <>
             <div className=' flex justify-between h-40px leading-[40px] mb-5'>
-                <h1 className=' font-bold text-[25px]'>List Book ({data.length} book)</h1>
-                <Link to={'/admin/book/add'} className=' text-blue-400 hover:text-blue-600 hover:underline'>Add a new book <ArrowRightOutlined /></Link>
+                <h1 className=' font-bold text-[25px]'>List Publisher ({data.length} publisher)</h1>
+                <Link to={'/admin/publisher/add'} className=' text-blue-400 hover:text-blue-600 hover:underline'>Add a new publisher <ArrowRightOutlined /></Link>
             </div>
             <List
+                count={4}
                 className="demo-loadmore-list"
                 loading={initLoading}
                 itemLayout="horizontal"
@@ -72,28 +71,19 @@ const ListBook = () => {
                 dataSource={list}
                 renderItem={(item, index) => (
                     <List.Item
-                        actions={[<Link to={`/admin/book/details/${item._id}`} key="see-details">See more details</Link>]}
+                        actions={[<Link to={`/admin/publisher/details/${item._id}`} key="see-details">See more details</Link>]}
                     >
                         <Skeleton avatar title={false} loading={item.loading} active>
                             <List.Item.Meta
-                                avatar={<img className=' w-12' src={item.thumbnail} />}
-                                title={<p className='font-bold'>{index + 1}. {item.book_title}</p>}
-                                description={<p className=' w-[500px] overflow-hidden overflow-ellipsis line-clamp-2'>{item.description}</p>}
+                                title={<p className='font-bold'>{index + 1}. {item.publisher_name}</p>}
+                                description={<p >{item.description}</p>}
                             >
                             </List.Item.Meta>
                         </Skeleton>
-                        <div className=' m-6'>{item.author_id?.map((author, index) => {
-                            return <span key={index}>
-                                {author.author_name}
-                                {index < item.author_id.length - 1 && ', '}
-                            </span>
-                        })}</div>
-                        <div className=' m-6'>{item.publisher_id?.publisher_name}</div>
-
                     </List.Item>
                 )}
             />
         </>
     );
 };
-export default ListBook;
+export default ListPublisher;

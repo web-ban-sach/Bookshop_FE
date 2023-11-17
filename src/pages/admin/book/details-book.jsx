@@ -28,6 +28,7 @@ const DetailsBook = () => {
 
         if (isConfirmed) {
             removeBook(id).then(() => {
+                window.alert('Xóa thành công!')
                 navigate('/admin/book/list')
             })
             console.log("Đã xóa");
@@ -112,12 +113,21 @@ const DetailsBook = () => {
                         className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4"
                     >
                         <dt className="font-medium text-gray-900"></dt>
-                        <button
-                            type='click'
-                            onClick={onRemove}
-                            className="text-white leading-[30px] text-center sm:col-span-2 bg-red-400 w-[70px] hover:text-gray-200 hover:bg-red-600 hover:shadow-lg hover:shadow-gray-300 h-[30px] rounded-md">
-                            Xóa
-                        </button>
+                        <div>
+                            <Link to={`/admin/book/edit/${id}`} className="mr-5">
+                                <button
+                                    className="text-white leading-[30px] text-center sm:col-span-2 bg-yellow-500 w-[70px] hover:text-white hover:bg-yellow-400 hover:shadow-lg hover:shadow-gray-300 h-[30px] rounded-md">
+                                    Update
+                                </button>
+                            </Link>
+                            <button
+                                type='click'
+                                onClick={onRemove}
+                                className="text-white leading-[30px] text-center sm:col-span-2 bg-red-400 w-[70px] hover:text-gray-200 hover:bg-red-600 hover:shadow-lg hover:shadow-gray-300 h-[30px] rounded-md">
+                                Remove
+                            </button>
+                        </div>
+
                     </div>
                 </dl>
             </div>

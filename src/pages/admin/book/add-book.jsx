@@ -1,11 +1,12 @@
-import { ArrowRightOutlined } from "@ant-design/icons"
-import { Link } from "react-router-dom"
+import { ArrowRightOutlined, UploadOutlined } from "@ant-design/icons"
+import { Link, useNavigate } from "react-router-dom"
 import {
     Button,
     Form,
     Input,
     InputNumber,
     Select,
+    Upload,
 } from 'antd';
 import { useEffect, useState } from "react";
 import { getCategories } from "../../../api/book/category.api";
@@ -18,7 +19,10 @@ const AddBook = () => {
     const [categories, setCategory] = useState('')
     const [authors, setAuthor] = useState('')
     const [publishers, setPublisher] = useState('')
+    const [file, setFile] = useState([]);
+    const navigate = useNavigate()
 
+    // Lấy data để fill vào thẻ select danh mục, tác giả, nhà xuất bản
     useEffect(() => {
         getCategories().then((res) => {
             setCategory(res.data);
@@ -31,6 +35,7 @@ const AddBook = () => {
         })
     }, [])
 
+    // Định dạng thẻ input giá theo mệnh giá việt
     const formatCurrency = (value) => {
         // Chuyển đổi giá trị số thành chuỗi có định dạng "100.000 VND"
         return value.toLocaleString('vi-VN') + ' VND';
@@ -41,30 +46,46 @@ const AddBook = () => {
         return isNaN(parsedValue) ? 0 : parseInt(parsedValue, 10);
     };
 
+    // Hàm chạy khi submit form
     const onFinish = async (values) => {
-        const formData = new FormData();
+        if (file) {
+            const formData = new FormData();
+            formData.append('file', file[0]);
+            formData.append('upload_preset', 'book_shop'); // Replace with your Cloudinary upload preset
+            formData.append('folder', 'bookshop'); // Replace with your desired folder name
 
-        // Thêm từng trường dữ liệu vào FormData
-        Object.entries(values).forEach(([key, value]) => {
-            // Đối với trường kiểu mảng, thêm từng phần tử
-            if (key === 'thumbnail' && value instanceof File) {
-                formData.append(key, value);
-            } else if (Array.isArray(value)) {
-                value.forEach((element) => {
-                    formData.append(`${key}[]`, element);
-                })
-            } else {
-                formData.append(key, value)
+            try {
+                const response = await fetch('https://api.cloudinary.com/v1_1/dyewrrq39/image/upload', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const data = await response.json();
+                if (data.secure_url) {
+                    await addBook({ ...values, thumbnail: data.secure_url })
+                        .then(() => {
+                            window.alert("Thêm sách thành công!")
+                            navigate('/admin/book/list')
+                        })
+                }
+            } catch (error) {
+                console.error('Error uploading image:', error);
             }
-        })
+        }
+    };
 
-        await addBook(formData)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                alert('Thêm được rồi');
-            })
-            .catch(error => console.error('Error:', error));
+    // Xử lí hành động ở thẻ upload ảnh
+    const props = {
+        onRemove: () => {
+            setFile('');
+        },
+        beforeUpload: (file) => {
+            // Clear existing fileList and add the new file
+            setFile([file]);
+            // Return false to prevent automatic upload
+            return false;
+        },
+        file,
     };
 
     return <>
@@ -199,12 +220,13 @@ const AddBook = () => {
                     formatter={(value) => `${value}%`}
                     parser={(value) => value.replace('%', '')} />
             </Form.Item>
-            <Form.Item
-                label="Thumbnail"
+            <Form.Item label="Thumbnail"
                 name="thumbnail"
                 rules={[{ required: true, message: 'Vui lòng thêm ảnh!' }]}
             >
-                <input className="w-full p-1 rounded text-sm border border-gray-200 hover:border-blue-400" type="file" />
+                <Upload {...props} maxCount={1}>
+                    <Button icon={<UploadOutlined />}>Select File</Button>
+                </Upload>
             </Form.Item>
             <Form.Item label="Mô tả"
                 name="description"
