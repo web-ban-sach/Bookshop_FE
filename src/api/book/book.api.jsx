@@ -19,3 +19,7 @@ export const updateBook = (id, data) => {
 export const removeBook = (id) => {
     return instance.delete('/book/remove/' + id)
 }
+
+export const searchBook = (searchQuery) => {
+    return instance.get(`http://localhost:8000/book/search-book?searchQuery=${searchQuery}`)
+}

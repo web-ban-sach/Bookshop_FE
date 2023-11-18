@@ -1,51 +1,60 @@
 import { useEffect, useState } from "react"
 import { getBooks } from "../api/book/book.api"
-import { Link } from "react-router-dom"
+import { Slider } from "../components/Slider";
+import { Pagination } from "antd";
+import Card from "../components/Card";
 
 const HomePage = () => {
     const [books, setBook] = useState('')
+    const [dataList, setDataList] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
             const book = await getBooks()
-            if (!books) {
+            if (!dataList) {
                 setBook(book)
+                setDataList(book?.data?.data)
             }
         }
         fetchData()
-    }, [books])
+    }, [dataList])
+
+    // Số mục dữ liệu mỗi trang
+    const itemsPerPage = 5;
+    // State để theo dõi trang hiện tại
+    const [currentPage, setCurrentPage] = useState(1)
+    // Tính chỉ mục bắt đầu và chỉ mục kết thúc của dữ liệu hiển thị trên trang
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    // Lọc dữ liệu để hiển thị chỉ các mục trong khoảng startIndex và endIndex
+    const currentData = books?.data?.data.slice(startIndex, endIndex);
+    // Xử lý sự kiện khi trang thay đổi
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
 
     return <>
-        {books?.data?.data.map((book) => {
-            const formattedPrice = new Intl.NumberFormat('vi-VN', {
-                style: 'currency',
-                currency: 'VND',
-            }).format(book.old_price);
-            const formattedNewPrice = new Intl.NumberFormat('vi-VN', {
-                style: 'currency',
-                currency: 'VND',
-            }).format(book.new_price);
-
-            return <div key={book._id} className=" w-48 p-4 rounded-lg hover:shadow-lg">
-                <title>Trang chủ</title>
-                <img className=" px-8 mb-2" src={book.thumbnail} alt="" />
-                <Link to={'/'}><p className=" text-sm leading-4 h-8 overflow-hidden overflow-ellipsis line-clamp-2 hover:text-blue-800 hover:underline">{book.book_title}</p></Link>
-                {book.author_id.length === 1 && book.author_id.map((author) => {
-                    return <Link to={'/'} key={author._id}><p className=" text-xs mt-1 text-green-500 font-bold hover:underline overflow-hidden overflow-ellipsis whitespace-nowrap">{author.author_name}</p></Link>
-                })
-
-                    || <p className=" text-xs mt-1 text-green-500 font-bold hover:underline overflow-hidden overflow-ellipsis whitespace-nowrap">Nhiều tác giả</p>
-                }
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                        <p className=" text-sm font-bold text-red-500">{formattedNewPrice}</p>
-                        <del className=" text-xs text-gray-400">{formattedPrice}</del>
-                    </div>
-                    <p className=" w-7 h-7 p-[2px] leading-6 bg-red-500 text-[10px] text-white rounded-full">-{book.sale}%</p>
-                </div>
-
+        <title>Trang chủ</title>
+        <section>
+            <Slider />
+        </section>
+        <section>
+            <div className="flex justify-between items-center">
+                <h1 className="font-bold text-lg my-4">Sách mới</h1>
+                <Pagination
+                    defaultCurrent={1}
+                    total={dataList.length}
+                    pageSize={itemsPerPage}
+                    onChange={handlePageChange}
+                />
             </div>
-        })}
+            <div className=" flex flex-wrap-reverse">
+                {currentData?.map((book) => {
+                    return <Card key={book._id} {...book} />
+                })}
+            </div>
+        </section>
+
     </>
 }
 

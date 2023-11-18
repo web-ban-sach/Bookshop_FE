@@ -23,13 +23,15 @@ import ListPublisher from "./pages/admin/publisher/list-publisher";
 import AddPublisher from "./pages/admin/publisher/add-publisher";
 import EditPublisher from "./pages/admin/publisher/edit-publisher";
 import DetailsPublisher from "./pages/admin/publisher/details-publisher";
+import ListPage from "./pages/list.page";
 
 export const router = createBrowserRouter([
     {
         path: "/",
         element: <UserLayout />,
         children: [
-            { path: "/", element: <HomePage /> },
+            { path: "", element: <HomePage /> },
+            { path: "listBooks", element: <ListPage /> },
         ]
     },
     {
