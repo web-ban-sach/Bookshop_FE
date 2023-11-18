@@ -28,6 +28,7 @@ export const Nav = () => {
         localStorage.removeItem('token');
         // Cập nhật trạng thái đăng nhập
         setIsLoggedIn(false);
+        window.alert('Đã đăng xuất!')
         navigate('/auth/login')
     };
 
@@ -48,7 +49,7 @@ export const Nav = () => {
                             Quản trị
                         </Link>
                     ) : (
-                        <Link to={'/user/account'} className="flex items-center rounded-md text-sm hover:bg-white px-3 py-1 m-1 leading-5">
+                        <Link to={'/account/profile'} className="flex items-center rounded-md text-sm hover:bg-white px-3 py-1 m-1 leading-5">
                             <UserOutlined className=" w-4 mr-2" /> Thông tin tài khoản
                         </Link>
                     )}

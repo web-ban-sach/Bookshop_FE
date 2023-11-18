@@ -12,10 +12,10 @@ const Header = () => {
                 <SearchInput />
                 <nav>
                     <Link to={'/'}>
-                        <Button className="border-none shadow-none text-base">Home</Button>
+                        <Button className="border-none shadow-none text-base">HOME</Button>
                     </Link>
                     <Link to={'/listBooks'}>
-                        <Button className="border-none shadow-none text-base">Books</Button>
+                        <Button className="border-none shadow-none text-base">BOOKS</Button>
                     </Link>
                 </nav>
             </div>

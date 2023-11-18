@@ -1,8 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import UserLayout from "./components/layouts/UserLayout";
 import HomePage from "./pages/home.page";
-import { LoginPage } from "./pages/user/login.page";
-import { RegisterPage } from "./pages/user/register.page";
+import { LoginPage } from "./pages/auth/login.page";
+import { RegisterPage } from "./pages/auth/register.page";
 import { NotFoundPage } from "./pages/not-found.page";
 import AdminLayout from "./components/layouts/AdminLayout";
 import CheckRole from "./helper/checkRole";
@@ -24,6 +24,11 @@ import AddPublisher from "./pages/admin/publisher/add-publisher";
 import EditPublisher from "./pages/admin/publisher/edit-publisher";
 import DetailsPublisher from "./pages/admin/publisher/details-publisher";
 import ListPage from "./pages/list.page";
+import DetailsPage from "./pages/details-book.page";
+import AccountLayout from "./components/layouts/AccountLayout";
+import UserProfile from "./pages/account/account-info.page";
+import ChangePassword from "./pages/account/change-password";
+import ChangeInfo from "./pages/account/change-info";
 
 export const router = createBrowserRouter([
     {
@@ -32,6 +37,7 @@ export const router = createBrowserRouter([
         children: [
             { path: "", element: <HomePage /> },
             { path: "listBooks", element: <ListPage /> },
+            { path: "detailsBook/:id", element: <DetailsPage /> },
         ]
     },
     {
@@ -78,6 +84,15 @@ export const router = createBrowserRouter([
         children: [
             { path: "login", element: <LoginPage /> },
             { path: "register", element: <RegisterPage /> },
+        ]
+    },
+    {
+        path: "/account",
+        element: <AccountLayout />,
+        children: [
+            { path: "profile", element: <UserProfile /> },
+            { path: "changePassword/:id", element: <ChangePassword /> },
+            { path: "changeInfo/:id", element: <ChangeInfo /> },
         ]
     },
     { path: "*", element: <NotFoundPage /> }

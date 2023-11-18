@@ -1,8 +1,9 @@
 import { Pagination } from "antd";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Card from "../components/Card";
 import { getBooks, searchBook } from "../api/book/book.api";
+import { ArrowRightOutlined } from "@ant-design/icons";
 
 let currentData
 
@@ -76,6 +77,10 @@ const ListPage = () => {
                         pageSize={itemsPerPage}
                         onChange={handlePageChange}
                     />
+                    <Link className=' text-blue-400 leading-2 hover:text-blue-600'
+                        onClick={() => window.history.back()}>
+                        Back <ArrowRightOutlined />
+                    </Link>
                 </div>
                 <div className=" flex flex-wrap-reverse">
                     {currentData?.length == 0 ? <div>Không tìm thấy kết quả nào cho &ldquo;{query}&rdquo;</div> : currentData?.map((book) => {

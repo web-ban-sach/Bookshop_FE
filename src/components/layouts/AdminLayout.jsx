@@ -9,7 +9,7 @@ import {
 import { Layout, Menu, Button, theme } from 'antd';
 import { Loaders } from '../Loaders';
 import { decodeToken } from '../../api/user/auth.api';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 const { Header, Sider, Content } = Layout;
 
 const CustomMenu = () => {
@@ -59,6 +59,7 @@ const CustomMenu = () => {
 
 const AdminLayout = () => {
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate()
 
     useEffect(() => {
         // Simulate a delay for loading
@@ -78,12 +79,15 @@ const AdminLayout = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('token')
+        if (!token) {
+            navigate('*')
+        }
         const fetchUser = async () => {
             const response = await decodeToken(token)
             setUser(response.data.data);
         }
         fetchUser()
-    }, [])
+    }, [navigate])
 
     return <>
         {loading ? <Loaders /> :

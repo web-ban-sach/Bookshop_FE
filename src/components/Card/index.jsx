@@ -13,9 +13,9 @@ const Card = (book) => {
     }).format(new_price);
 
     return <>
-        <div key={_id} className=" basis-1/5 w-48 p-4 rounded-lg hover:shadow-lg">
+        <Link to={`/detailsBook/${_id}`} key={_id} className=" basis-1/5 w-48 p-4 rounded-lg hover:shadow-lg">
             <img className=" px-8 mb-2" src={thumbnail} alt="" />
-            <Link to={'/'}><p className=" text-sm leading-4 h-8 overflow-hidden overflow-ellipsis line-clamp-2 hover:text-blue-800 hover:underline">{book_title}</p></Link>
+            <p className=" text-sm leading-4 h-8 overflow-hidden overflow-ellipsis line-clamp-2 hover:text-blue-800 hover:underline">{book_title}</p>
             {author_id?.length === 1 && author_id.map((author) => {
                 return <Link to={'/'} key={author._id}><p className=" text-xs mt-1 text-green-500 font-bold hover:underline overflow-hidden overflow-ellipsis whitespace-nowrap">{author.author_name}</p></Link>
             })
@@ -29,7 +29,7 @@ const Card = (book) => {
                 </div>
                 <p className=" w-7 h-7 p-[2px] leading-6 bg-red-500 text-[10px] text-white rounded-full">-{sale}%</p>
             </div>
-        </div>
+        </Link>
     </>
 }
 

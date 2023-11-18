@@ -1,10 +1,12 @@
 import { useForm, Controller } from "react-hook-form";
 import { registerSchema } from "../../helper/auth.schema";
 import { register } from "../../api/user/auth.api";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 
 export const RegisterPage = () => {
+    const navigate = useNavigate()
+
     const { handleSubmit, control, formState: { errors } } = useForm({
         mode: 'onBlur',
         resolver: async (data) => {
@@ -27,6 +29,7 @@ export const RegisterPage = () => {
         try {
             await register(data)
             window.alert('Đăng ký thành công!')
+            navigate("/auth/login")
         } catch (error) {
             if (error) {
                 window.alert(error.response.data.message)

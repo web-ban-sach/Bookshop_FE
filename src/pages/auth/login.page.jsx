@@ -1,11 +1,10 @@
 import { useForm, Controller } from "react-hook-form";
 import { login } from "../../api/user/auth.api";
 import { loginSchema } from "../../helper/auth.schema";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 
 export const LoginPage = () => {
-    const navigate = useNavigate()
     const { handleSubmit, control, formState: { errors } } = useForm({
         mode: 'onBlur',
         resolver: async (data) => {
@@ -30,7 +29,8 @@ export const LoginPage = () => {
             if (response) {
                 // Lưu token vào localStorage
                 localStorage.setItem('token', response.data.token)
-                navigate('/')
+                alert('Đăng nhập thành công!')
+                window.history.back()
             }
         } catch (error) {
             if (error.response) {
