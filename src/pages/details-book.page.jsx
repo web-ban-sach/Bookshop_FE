@@ -2,24 +2,17 @@ import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { getBookById } from "../api/book/book.api"
 import { ArrowRightOutlined } from "@ant-design/icons"
-import { Image } from "antd"
-
-let path
-let buttonName
+import { Button, Image } from "antd"
+import FormComment from "../components/Comment/form-comment"
+import { decodeToken } from "../api/user/auth.api"
+import { addCart } from "../api/common/cart.api"
 
 const DetailsPage = () => {
     const [book, setBook] = useState('')
+    const [user_id, setUserId] = useState('')
 
     const { id } = useParams()
     const token = localStorage.getItem('token')
-
-    if (!token) {
-        path = '/auth/login'
-        buttonName = 'Login to buy'
-    } else {
-        path = '/cart'
-        buttonName = 'Add to cart'
-    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -31,6 +24,16 @@ const DetailsPage = () => {
         fetchData()
     }, [id])
 
+    useEffect(() => {
+        if (token) {
+            decodeToken(token)
+                .then((res) => {
+                    setUserId(res.data.data._id);
+                })
+        }
+
+    }, [token])
+
     const formattedPrice = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',
@@ -41,6 +44,7 @@ const DetailsPage = () => {
     }).format(book.new_price);
 
     return <>
+        <title>{book.book_title} | BookStore</title>
         <div className=' flex justify-between h-40px leading-[40px] mb-5'>
             <h1 className='flex font-bold text-[20px]'><span className="max-w-[300px] overflow-hidden overflow-ellipsis line-clamp-1">{book.book_title} </span>-{book.author_id?.map((author, index) => {
                 return <span key={index}>
@@ -61,12 +65,21 @@ const DetailsPage = () => {
                     src={book.thumbnail}
                 />
                 <div className="mt-6">
-                    <Link to={path} className="mr-5">
-                        <button
-                            className="text-white leading-[30px] text-center sm:col-span-2 bg-blue-400 w-[100%] hover:text-white hover:bg-blue-500 hover:shadow-lg hover:shadow-gray-300 h-[40px] rounded-lg">
-                            {buttonName}
-                        </button>
-                    </Link>
+                    {!token
+                        ? < Link to={'/auth/login'}>
+                            <Button type="primary" className=" border-blue-500 text-blue-500" htmlType="submit">
+                                Login to buy
+                            </Button>
+                        </Link>
+                        : <Button onClick={async () => {
+                            const data = { user_id, book_id: id, quantity: 1 }
+                            await addCart(data).then(() => {
+                                window.alert("Đã thêm vào giỏ hàng!")
+                            })
+                        }} className=" border-blue-500 text-blue-500" htmlType="submit">
+                            Add to cart
+                        </Button>
+                    }
                 </div>
             </div>
             <dl className="-my-3 mt-3 divide-y w-[80%] divide-gray-100 text-sm">
@@ -140,6 +153,9 @@ const DetailsPage = () => {
 
             </dl>
         </div>
+        <section className=" mt-10 p-3 bg-slate-100 rounded-lg">
+            <FormComment book_id={id} />
+        </section >
     </>
 }
 

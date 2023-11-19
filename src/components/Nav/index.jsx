@@ -35,7 +35,7 @@ export const Nav = () => {
     return <>
         <img src="https://res.cloudinary.com/dyewrrq39/image/upload/v1700028148/bookshop/xwxltv5sphthdkkagniz.png" alt="" />
         <nav className="flex justify-end items-center bg-gray-200 px-5 h-[40px] space-x-4">
-            <Link to={'/'} className="flex items-center rounded-md text-sm hover:bg-white px-3 py-1 m-1 leading-5">
+            <Link to={'/cart'} className="flex items-center rounded-md text-sm hover:bg-white px-3 py-1 m-1 leading-5">
                 <ShoppingOutlined className=" w-4 mr-2" /> Giỏ hàng
             </Link>
             {isLoggedIn ? (// Hiển thị nút thông tin tài khoản và nút đăng xuất nếu đã đăng nhập

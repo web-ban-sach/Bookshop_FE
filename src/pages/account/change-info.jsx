@@ -74,6 +74,7 @@ const ChangeInfo = () => {
     };
 
     return <>
+        <title>Cập nhật profile</title>
         <div className=' flex justify-between h-40px leading-[40px] mb-5'>
             <h1 className=' font-bold text-[25px]'>Cập nhật thông tin cá nhân</h1>
             <Link to={'/account/profile'} className=' text-blue-400 hover:text-blue-600 hover:underline'>Back to profile <ArrowRightOutlined /></Link>

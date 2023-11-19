@@ -1,10 +1,12 @@
 import { useForm, Controller } from "react-hook-form";
 import { login } from "../../api/user/auth.api";
 import { loginSchema } from "../../helper/auth.schema";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 
 export const LoginPage = () => {
+    const navigate = useNavigate()
+
     const { handleSubmit, control, formState: { errors } } = useForm({
         mode: 'onBlur',
         resolver: async (data) => {
@@ -22,15 +24,15 @@ export const LoginPage = () => {
         }
     })
 
-    
+
     const onSubmit = async (data) => {
         try {
             const response = await login(data)
             if (response) {
                 // Lưu token vào localStorage
                 localStorage.setItem('token', response.data.token)
-                alert('Đăng nhập thành công!')
-                window.history.back()
+                window.alert('Đăng nhập thành công!')
+                navigate('/')
             }
         } catch (error) {
             if (error.response) {
@@ -49,7 +51,7 @@ export const LoginPage = () => {
                     <div className="">
                         <img src="https://floatui.com/logo.svg" width={150} className="lg:hidden" />
                         <div className="mt-5 space-y-2">
-                            <Link to={'/'} className=" flex items-center text-sm text-indigo-600 hover:text-indigo-500 hover:underline" ><ArrowLeftOutlined className="mr-2"/> Back to home</Link>
+                            <Link to={'/'} className=" flex items-center text-sm text-indigo-600 hover:text-indigo-500 hover:underline" ><ArrowLeftOutlined className="mr-2" /> Back to home</Link>
                             <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl">Login</h3>
                             <p className="">Do not have an account? <Link to={'/auth/register'} className="font-medium text-indigo-600 hover:text-indigo-500">Sign up</Link></p>
                         </div>

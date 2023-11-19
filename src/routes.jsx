@@ -29,6 +29,8 @@ import AccountLayout from "./components/layouts/AccountLayout";
 import UserProfile from "./pages/account/account-info.page";
 import ChangePassword from "./pages/account/change-password";
 import ChangeInfo from "./pages/account/change-info";
+import CartLayout from "./components/layouts/CartLayout";
+import CartPage from "./pages/cart.page";
 
 export const router = createBrowserRouter([
     {
@@ -38,6 +40,13 @@ export const router = createBrowserRouter([
             { path: "", element: <HomePage /> },
             { path: "listBooks", element: <ListPage /> },
             { path: "detailsBook/:id", element: <DetailsPage /> },
+        ]
+    },
+    {
+        path: "/cart",
+        element: <CartLayout />,
+        children: [
+            { path: "", element: <CartPage /> }
         ]
     },
     {
